@@ -1,14 +1,13 @@
 # -*- coding: utf-8 -*-
 """
 
-Much of the idea behind this assignment is movtivated by Shen et al [1].
+Much of the idea behind this is movtivated by Shen et al [1].
 (the data augmentation rules proposed in that work are used to improve
 the robustness of the autoencoder)
 
 [1] Shen et al (2019) "Educating Text Autoencoders: Latent Representation Guidance via Denoising" https://arxiv.org/pdf/1905.12777.pdf
 """
 
-# Commented out IPython magic to ensure Python compatibility.
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
@@ -25,12 +24,12 @@ drive.mount('/content/gdrive')
 train_path = '/content/gdrive/My Drive/CSC413/A3/reuters_train.txt' # Update me
 valid_path = '/content/gdrive/My Drive/CSC413/A3/reuters_valid.txt' # Update me
 
-"""We will be using PyTorch's `torchtext` utilities to help us load, process,
+"""Using PyTorch's `torchtext` utilities to help us load, process,
 and batch the data. 
 
-We'll be using a `TabularDataset` to load our data, which works well on structured
-CSV data with fixed columns (e.g. a column for the sequence, a column for the label). Our tabular dataset
-is even simpler: we have no labels, just some text. So, we are treating our data as a table with one field
+Using a `TabularDataset` to load our data, which works well on structured
+CSV data with fixed columns (e.g. a column for the sequence, a column for the label). The tabular dataset
+is even simpler: we have no labels, just some text. Treating the data as a table with one field
 representing our sequence.
 """
 
@@ -60,8 +59,6 @@ train_data = torchtext.legacy.data.TabularDataset(
 
 
 # Draw histograms of the number of words per headline in our training set.
-
-
 word_list = []
 
 for headline in train_data:
@@ -98,19 +95,13 @@ for headline in train_data:
 print("The number of distinct words in the training data is", len(count))
 
 """
-
 The distribution of *words* will have a long tail, meaning that there are some words
 that will appear very often, and many words that will appear infrequently. How many words
 appear exactly once in the training set? Exactly twice?
 """
 
-# Report your values here. Make sure that you report the actual values,
-# and not just the code used to get those values
-
 single_appearances = 0
-#single_words = []
 double_appearances = 0
-#double_words = []
 
 for key in count:
   if count[key] == 1:
@@ -221,9 +212,7 @@ input_seq = torch.Tensor([vocab.stoi[w] for w in headline]).long().unsqueeze(0)
 model.forward(input_seq)
 
 """
-
-To check that your model is set up correctly, we'll train our AutoEncoder
-neural network for at least 300 iterations to memorize this sequence:
+Train our AutoEncoderneural network for at least 300 iterations to memorize this sequence, check that it is set up correctly
 """
 
 headline = train_data[42].title 
@@ -232,7 +221,7 @@ input_seq = torch.Tensor([vocab.stoi[w] for w in headline]).long().unsqueeze(0)
 """
 Note that the Cross Entropy Loss expects a rank-2 tensor as its first
 argument, and a rank-1 tensor as its second argument. Hence
-need to properly reshape your data to be able to compute the loss.
+need to properly reshape the data to be able to compute the loss.
 """
 
 model = AutoEncoder(vocab_size, 128, 128)
@@ -435,8 +424,6 @@ Computing the embeddings of every item in the validation set. Then, storing the
 result in a single PyTorch tensor of shape `[19046, 128]`, since there are
 19,046 headlines in the validation set.
 """
-
-
 embeddings = []
 for headline in valid_data:
   headline = headline.title
